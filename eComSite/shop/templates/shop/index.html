@@ -1,0 +1,101 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <!-- bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <!-- jquery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        <!-- css -->
+    <link rel="stylesheet" href="{% static 'shop/style.css' %}">
+    <title>products</title>
+</head>
+
+<body>
+    <div class="container">
+        <!-- row for search bar -->
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <form class="card card-sm">
+                    <div class="card-body row no-gytters align-items-center">
+                        <div class="col">
+                            <input type="search" name="item_name" placeholder="search for product"
+                                class="form-control form-control-borderless">
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn-success" type="submit">search</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- row for card -->
+        <div class="row mt-3">
+            {% for product in product_objects %}
+            <div class="col-md-3">
+                    <div class="card mt-3">
+                        <img src="{{ product.image }}" alt="" class="card-img-top" height="200" width="150">
+                        <div class="card-body">
+                            <div class="card-title">
+                                {{ product.title }}
+                            </div>
+                            <div class="card-text">
+                                $ {{ product.price }}
+                            </div>
+                            <a href="/{{ product.id }}" class="btn btn-warning">view</a >
+                            <button id="{{ product.id }}" class="btn atc btn-warning">Add to cart</button>
+                        </div>
+                    </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="row">
+            <div class="col-md-3 offset-md-4">
+                <ul class="pagination">
+                    {% if product_objects.has_previous %}
+                    <li class="page-item">
+                        <a href="?page {{ product_objects.previous_page_number }}">previous</a>
+                    </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <a href="?page {{ product_objects.number }}">current</a>
+                    </li>
+                    {% if product_objects.has_next %}
+                    <li class="page-item">
+                        <a href="?page {{ product_objects.next_page_number }}">Next</a>
+                    </li>
+
+                    {% endif %}
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+  console.log('This is working!');
+  if(localStorage.getItem('cart') == null){
+      var cart = {
+
+      };
+  }else{
+    cart = JSON.parse(localStorage.getItem('cart'));
+    
+  }
+  $(document).on('click', '.atc', function(){
+    console.log('The add to cart button is clicked!');
+    var item_id = this.id.toString();
+    console.log(item_id);
+  });
+
+</script>
+</html>
